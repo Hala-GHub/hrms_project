@@ -1,0 +1,138 @@
+{% extends "hrms/base.html" %}
+{% block title %}{{ emp.full_name }}{% endblock %}
+
+{% block content %}
+
+<div class="bg-white p-6 rounded-xl shadow">
+
+  <!-- 🔵 HEADER -->
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-2xl font-bold">{{ emp.full_name }}</h1>
+
+    <div>
+      <a href="{% url 'hrms:employee_update' emp.pk %}"
+         class="text-green-600 font-medium hover:underline">
+         Edit
+      </a>
+
+      <span class="mx-2 text-gray-400">|</span>
+
+      <button
+        hx-delete="{% url 'hrms:employee_delete' emp.pk %}"
+        hx-target="#delete-result"
+        hx-swap="innerHTML"
+        hx-confirm="Permanently delete {{ emp.full_name }}?"
+        class="text-red-600 font-medium hover:underline"
+      >
+        Delete
+      </button>
+    </div>
+  </div>
+
+  <!-- 🔵 BASIC INFO -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+
+    <p><strong>Title:</strong> {{ emp.title }}</p>
+    <p><strong>Level:</strong> {{ emp.get_level_display }}</p>
+
+    <p><strong>Type:</strong> {{ emp.get_employee_type_display }}</p>
+
+    <p>
+      <strong>Department:</strong>
+      {% if emp.department %}
+        <a href="{% url 'hrms:department_detail' emp.department.pk %}"
+           class="text-blue-600 hover:underline">
+           {{ emp.department }}
+        </a>
+      {% else %}
+        —
+      {% endif %}
+    </p>
+
+    <p>
+      <strong>Manager:</strong>
+      {% if emp.manager %}
+        <a href="{% url 'hrms:employee_detail' emp.manager.pk %}"
+           class="text-blue-600 hover:underline">
+           {{ emp.manager.full_name }}
+        </a>
+      {% else %}
+        (Top of hierarchy)
+      {% endif %}
+    </p>
+
+    <p><strong>Hire Date:</strong> {{ emp.hire_date }}</p>
+    <p><strong>Active:</strong> {{ emp.is_active|yesno:"Yes,No" }}</p>
+
+  </div>
+
+  <!-- 🔵 BIO -->
+  {% if emp.bio %}
+    <div class="mt-4">
+      <strong>Bio:</strong>
+      <p class="text-gray-600 mt-1">{{ emp.bio }}</p>
+    </div>
+  {% endif %}
+
+  <div id="delete-result" class="mt-3"></div>
+
+</div>
+
+<!-- 🔵 DIRECT REPORTS -->
+<div class="bg-white p-6 rounded-xl shadow mt-6">
+  <h2 class="text-lg font-semibold mb-3">
+    Direct Reports ({{ direct_reports.count }})
+  </h2>
+
+  <ul class="space-y-2">
+    {% for dr in direct_reports %}
+      <li>
+        <a href="{% url 'hrms:employee_detail' dr.pk %}"
+           class="text-blue-600 hover:underline">
+           {{ dr.full_name }}
+        </a>
+        <span class="text-gray-500">— {{ dr.title }}</span>
+      </li>
+    {% empty %}
+      <li class="text-gray-500">None</li>
+    {% endfor %}
+  </ul>
+</div>
+
+<!-- 🔵 PROJECTS -->
+<div class="bg-white p-6 rounded-xl shadow mt-6">
+  <h2 class="text-lg font-semibold mb-3">Projects (Member)</h2>
+
+  <ul class="space-y-2">
+    {% for proj in projects %}
+      <li>
+        <a href="{% url 'hrms:project_detail' proj.pk %}"
+           class="text-blue-600 hover:underline">
+           {{ proj.name }}
+        </a>
+      </li>
+    {% empty %}
+      <li class="text-gray-500">None</li>
+    {% endfor %}
+  </ul>
+</div>
+
+<!-- 🔵 LED PROJECTS -->
+<div class="bg-white p-6 rounded-xl shadow mt-6">
+  <h2 class="text-lg font-semibold mb-3">Led Projects</h2>
+
+  <ul class="space-y-2">
+    {% for proj in led_projects %}
+      <li>
+        <a href="{% url 'hrms:project_detail' proj.pk %}"
+           class="text-blue-600 hover:underline">
+           {{ proj.name }}
+        </a>
+      </li>
+    {% empty %}
+      <li class="text-gray-500">None</li>
+    {% endfor %}
+  </ul>
+</div>
+
+{% endblock %}

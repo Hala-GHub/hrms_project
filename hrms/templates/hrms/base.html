@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}HR Dashboard{% endblock %}</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- HTMX -->
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+</head>
+
+<body class="bg-gray-100 text-gray-800" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+
+  <!-- 🔵 NAVBAR -->
+  <nav class="bg-white shadow-md">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      
+      <!-- Logo / Title -->
+      <div class="text-xl font-bold text-blue-600">
+        HR Dashboard
+      </div>
+
+      <!-- Navigation Links -->
+      <div class="flex gap-6 text-sm font-medium">
+        <a href="{% url 'hrms:dashboard' %}" class="hover:text-blue-600">Dashboard</a>
+        <a href="{% url 'hrms:employee_list' %}" class="hover:text-blue-600">Employees</a>
+        <a href="{% url 'hrms:department_list' %}" class="hover:text-blue-600">Departments</a>
+        <a href="{% url 'hrms:project_list' %}" class="hover:text-blue-600">Projects</a>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- 🔵 MAIN CONTENT -->
+  <main class="max-w-7xl mx-auto p-6">
+    {% block content %}{% endblock %}
+  </main>
+
+</body>
+</html>
