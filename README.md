@@ -102,7 +102,7 @@ The application follows Django best practices:
 
 ###  Departments
 
-![Departments](assets/Department.png)
+![Departments](assets\Department.png)
 
 ---
 
